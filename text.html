@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text To Speech</title>
+
+     <style type="text/css">
+
+         *{
+             margin:0;
+             padding:0;
+             box-sizing: border-box;
+
+         }
+         html{
+             user-select: none;
+         }
+         body{
+             display: grid;
+             place-items: center;
+             min-height: 100vh;
+             background: #37c;
+         }
+         .con{
+             width: 350px;
+             height: 480px;
+             background: #eee;
+             padding: 50px 40px;
+             font-family: sans-serif;
+             border-radius: 15px;
+         }
+         .con header{
+             text-align: center;
+             font-size: 40px;
+             font-weight: 500;
+
+         }
+
+
+
+
+        .con form{
+         margin: 40px 0 30px;
+         }
+         form .box{
+             display: flex;
+             flex-direction:column ;
+             margin-bottom: 30px;
+         }
+
+         .box textarea{
+             height: 130px;
+             resize: none;
+             padding: 9px 11px;
+             font-size: 17px;
+         }
+         /* .box textarea::-webkit-scrollbar{
+
+         } */
+
+         .con :where(textarea,select,button){
+             outline: none;
+             border-radius:5px;
+             border: 2px solid #999;
+             height: 100%;
+             width: 100%;
+         }
+         .box .voices{
+             height: 50px;
+             padding: 8px;
+             font-size: 18px;
+         }
+         button{
+             height: 50px;
+             background: #37c;
+             font-size: 25px;
+             color: #eee;
+             cursor: pointer;
+             transition-duration: 0.3s;
+         }
+         .con button:hover{
+            background: #37e; 
+         }
+         .con button:active{
+             transform:scale(0.9)
+         }
+     </style>
+
+
+
+
+
+
+
+
+</head>
+<body>
+   <div claass="con">
+       <header>Text To Speech</header>
+       <form action="#">
+           <div class="box">
+               <label>Enter Text</label>
+               <textarea></textarea>
+           </div>
+           <div class="box">
+               <label>select voice</label>
+               <div class="voices">
+                   <select></select>
+               </div>
+           </div>
+           <button>convert To Speech</button>
+       </form>
+   </div> 
+</body>
+
+<script>type="text/javascript">
+
+ Const textarea= document.queryselector("textarea"),
+ voicelist = document.queryselector("select"),
+ speechBtn = document.queryselector("button");
+    
+  let synth= speechsynthesis,
+  isspeaking = true ;
+voices();
+function voices(){
+    for(let voice of synth.getvoice()){
+         let selected = voice.name === "Google US English" ? "
+         selected" : 
+         let option = <option value="${voice.name}"$selected
+         >${voice.name} (${voice.lang}) </option> ;
+             voicelist.insertAdjacentHTML("beforeend",option) ;
+        
+     }
+ }
+ synth.addEventlistener("voiceschanged",voices);
+ function textToSpeech(text){
+     let utterance = new SpeechsynthesisUtterance(text);
+     for(let voice of synth.getvoices()){
+         if(voice.name === voicelist.value){
+          utterance.voice = voice ;   
+         }
+     }
+     synth.speak(utterance) ;
+ }
+
+ speechBtn.addEventListener("click",e=>{
+     e.preventDefault() ;
+
+     if(textarea.value !== ""){
+        if (!synth.speaking){
+            textToSpeech(textarea);
+        }
+        else{
+             speechBtn.innerText = "convert To Speech"
+         }
+     }
+})
+ </script>
+/ </html>
